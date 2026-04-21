@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public TargetType type;
+    public TargetColor type;
     private Rigidbody2D enemyRb;
 
     void Awake()
@@ -12,17 +12,17 @@ public class Enemy : MonoBehaviour
 
     void OnDisable()
     {
+        Targets.Instance.RemoveTarget(this);
         enemyRb.linearVelocity = Vector3.zero;
     }
 
     public void OnHit()
     {
-        Targets.Instance.RemoveTarget(this);
         gameObject.SetActive(false);
     }
 }
 
-public enum TargetType
+public enum TargetColor
 {
     Default,
     Red,

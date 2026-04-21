@@ -5,8 +5,8 @@ public class Targets : MonoBehaviour
 {
     [SerializeField] private Transform border;
 
-    private readonly List<Enemy> Red = new();
-    private readonly List<Enemy> Blue = new();
+    private readonly List<Enemy> redTargets = new();
+    private readonly List<Enemy> blueTargets = new();
 
     public static Targets Instance;
 
@@ -40,36 +40,36 @@ public class Targets : MonoBehaviour
     }
 
     public Enemy GetClosestRed()
-    { return GetClosest(Red); }
+    { return GetClosest(redTargets); }
 
     public Enemy GetClosestBlue()
-    { return GetClosest(Blue); }
+    { return GetClosest(blueTargets); }
 
     public void AddTarget(Enemy enemy)
     {
-        if (enemy.type == TargetType.Red)
+        if (enemy.type == TargetColor.Red)
         {
-            if (!Red.Contains(enemy))
-                Red.Add(enemy);
+            if (!redTargets.Contains(enemy))
+                redTargets.Add(enemy);
         }
 
-        else if (enemy.type == TargetType.Blue)
+        else if (enemy.type == TargetColor.Blue)
         {
-            if (!Blue.Contains(enemy))
-                Blue.Add(enemy);
+            if (!blueTargets.Contains(enemy))
+                blueTargets.Add(enemy);
         }
     }
 
     public void RemoveTarget(Enemy enemy)
     {
-        if (enemy.type == TargetType.Red)
+        if (enemy.type == TargetColor.Red)
         {
-            Red.Remove(enemy);
+            redTargets.Remove(enemy);
         }
 
-        else if (enemy.type == TargetType.Blue)
+        else if (enemy.type == TargetColor.Blue)
         {
-            Blue.Remove(enemy);
+            blueTargets.Remove(enemy);
         }
     }
 }

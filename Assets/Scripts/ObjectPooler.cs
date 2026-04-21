@@ -24,21 +24,24 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
-    public GameObject GetFromPool(Vector3 pos, Quaternion rot)
+    public GameObject GetFromPool(Vector3 pos = default, Quaternion rot = default, bool makeActive = true)
     {
         foreach (var obj in objectPool)
         {
             if (!obj.activeSelf)
             {
                 obj.transform.SetPositionAndRotation(pos, rot);
-                obj.SetActive(true);
+                obj.SetActive(makeActive);
                 return obj;
             }
         }
         return null;
     }
 
-    public GameObject GetRandomFromPool(Vector3 pos, Quaternion rot)
+    public GameObject GetFromPool(bool makeActive = true)
+    { return GetFromPool(default, default, makeActive); }
+
+    public GameObject GetRandomFromPool(Vector3 pos = default, Quaternion rot = default, bool makeActive = true)
     {
         // Count how many are available
         int availableCount = 0;
@@ -59,7 +62,7 @@ public class ObjectPooler : MonoBehaviour
                 if (currentIndex == randomTarget)
                 {
                     obj.transform.SetPositionAndRotation(pos, rot);
-                    obj.SetActive(true);
+                    obj.SetActive(makeActive);
                     return obj;
                 }
                 currentIndex++;

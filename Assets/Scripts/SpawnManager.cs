@@ -16,13 +16,13 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator EnemySpawner()
     {
-        while(true)
+        while(GameManager.Instance.GameState == GameState.Playing)
         {
             GameObject spawnObj = null;
             while (spawnObj == null)
             {
                 Vector3 spawnPos = spawnArea.GetRandomPoint();
-                spawnObj = enemyPool.GetRandomFromPool(spawnPos, Quaternion.identity);
+                spawnObj = enemyPool.GetRandomFromPool(spawnPos);
 
                 if (spawnObj == null)
                     yield return null; // If pool is empty, wait for next frame
