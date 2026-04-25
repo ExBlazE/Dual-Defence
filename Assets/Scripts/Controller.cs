@@ -2,31 +2,39 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    [SerializeField] private VFXHandler vfxHandler;
-
     public void ShootRed()
     {
+        if (GameManager.Instance.State != GameState.Playing) return;
+
         Enemy target = Targets.Instance.GetClosestRed();
         if (target != null)
         {
             target.OnHit();
-            if (vfxHandler != null)
-                vfxHandler.SpawnRedLaser(target.transform.position);
+            GameManager.Instance.AddScore(target.Value);
+            GameEvents.RaiseEnemyHit(Faction.Red, target.transform.position);
         }
         else
+        {
             GameManager.Instance.LoseLife();
+            GameEvents.RaiseSelfHit(Faction.Red);
+        }
     }
 
     public void ShootBlue()
     {
+        if (GameManager.Instance.State != GameState.Playing) return;
+
         Enemy target = Targets.Instance.GetClosestBlue();
         if (target != null)
         {
             target.OnHit();
-            if (vfxHandler != null)
-                vfxHandler.SpawnBlueLaser(target.transform.position);
+            GameManager.Instance.AddScore(target.Value);
+            GameEvents.RaiseEnemyHit(Faction.Blue, target.transform.position);
         }
         else
+        {
             GameManager.Instance.LoseLife();
+            GameEvents.RaiseSelfHit(Faction.Blue);
+        }
     }
 }

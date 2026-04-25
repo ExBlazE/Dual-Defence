@@ -47,13 +47,13 @@ public class Targets : MonoBehaviour
 
     public void AddTarget(Enemy enemy)
     {
-        if (enemy.type == TargetColor.Red)
+        if (enemy.Faction == Faction.Red)
         {
             if (!redTargets.Contains(enemy))
                 redTargets.Add(enemy);
         }
 
-        else if (enemy.type == TargetColor.Blue)
+        else if (enemy.Faction == Faction.Blue)
         {
             if (!blueTargets.Contains(enemy))
                 blueTargets.Add(enemy);
@@ -62,12 +62,12 @@ public class Targets : MonoBehaviour
 
     public void RemoveTarget(Enemy enemy)
     {
-        if (enemy.type == TargetColor.Red)
+        if (enemy.Faction == Faction.Red)
         {
             redTargets.Remove(enemy);
         }
 
-        else if (enemy.type == TargetColor.Blue)
+        else if (enemy.Faction == Faction.Blue)
         {
             blueTargets.Remove(enemy);
         }

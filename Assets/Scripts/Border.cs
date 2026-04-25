@@ -4,7 +4,7 @@ public class Border : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameManager.Instance.GameState == GameState.Ended) return;
+        if (GameManager.Instance.State == GameState.Ended) return;
         
         if (collision.collider.TryGetComponent(out Enemy enemy))
         {

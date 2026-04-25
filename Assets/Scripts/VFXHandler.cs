@@ -7,16 +7,50 @@ public class VFXHandler : MonoBehaviour
     [SerializeField] private ObjectPooler blueLaserPool;
     [SerializeField] private Transform redBase;
     [SerializeField] private Transform blueBase;
-    [SerializeField] private Transform lifeBar;
+    [SerializeField] private Transform border;
 
     [Space]
     [SerializeField] private float laserFadeTime = 0.5f;
+
+    void OnEnable()
+    {
+        GameEvents.OnEnemyHit += HandleEnemyHit;
+        GameEvents.OnSelfHit += HandleSelfHit;
+    }
+
+    void OnDisable()
+    {
+        GameEvents.OnEnemyHit -= HandleEnemyHit;
+        GameEvents.OnSelfHit -= HandleSelfHit;
+    }
+
+    private void HandleEnemyHit(Faction faction, Vector3 targetPos)
+    {
+        if (faction == Faction.Red)
+            SpawnRedLaser(targetPos);
+        else if (faction == Faction.Blue)
+            SpawnBlueLaser(targetPos);
+    }
+
+    private void HandleSelfHit(Faction faction)
+    {
+        if (faction == Faction.Red)
+            SpawnRedLaserSelf();
+        else if (faction == Faction.Blue)
+            SpawnBlueLaserSelf();
+    }
 
     public void SpawnRedLaser(Vector3 targetPos)
     { SpawnLaser(redBase.position, targetPos, redLaserPool); }
 
     public void SpawnBlueLaser(Vector3 targetPos)
     { SpawnLaser(blueBase.position, targetPos, blueLaserPool); }
+
+    public void SpawnRedLaserSelf()
+    { SpawnLaser(redBase.position, border.position, redLaserPool); }
+
+    public void SpawnBlueLaserSelf()
+    { SpawnLaser(blueBase.position, border.position, blueLaserPool); }
 
     private void SpawnLaser(Vector3 startPos, Vector3 endPos, ObjectPooler laserPool)
     {
@@ -64,10 +98,5 @@ public class VFXHandler : MonoBehaviour
 
         yield return null;
         laser.gameObject.SetActive(false);
-    }
-
-    public void SetLifeBar(float scaleX)
-    {
-        lifeBar.localScale = new Vector3(scaleX, lifeBar.localScale.y, lifeBar.localScale.z);
     }
 }

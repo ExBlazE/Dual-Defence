@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int playerLives = 5;
-    [SerializeField] private VFXHandler vfxHandler;
+    [SerializeField] private int playerLife = 5;
+    [SerializeField] private UIManager ui;
 
-    public GameState GameState { get; private set; }
-    private int _lives;
+    public GameState State { get; private set; }
+
+    private int _life;
+    private int _score;
 
     public static GameManager Instance;
 
@@ -16,25 +18,34 @@ public class GameManager : MonoBehaviour
             Instance = this;
         else
             Destroy(this.gameObject);
+
+        Application.targetFrameRate = 60;
     }
 
     void Start()
     {
-        _lives = playerLives;
-        GameState = GameState.Playing;
+        _life = playerLife;
+        _score = 0;
+        State = GameState.Playing;
     }
 
     public void LoseLife()
     {
-        _lives--;
-        if (_lives <= 0)
+        _life--;
+        if (_life <= 0)
         {
-            _lives = 0;
-            GameState = GameState.Ended;
+            _life = 0;
+            State = GameState.Ended;
         }
 
-        if (vfxHandler != null)
-            vfxHandler.SetLifeBar((float)_lives / playerLives);
+        if (ui != null)
+            ui.SetLifeBar((float)_life / playerLife);
+    }
+
+    public void AddScore(int score)
+    {
+        _score += score;
+        ui.SetScore(_score);
     }
 }
 
