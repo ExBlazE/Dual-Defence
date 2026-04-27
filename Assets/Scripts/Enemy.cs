@@ -43,4 +43,7 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         GameEvents.RaiseEnemyDeath(Faction, Shape, transform.position);
     }
+
+    public void Kill()
+    { gameObject.SetActive(false); }
 }

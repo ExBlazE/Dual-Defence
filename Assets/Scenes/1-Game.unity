@@ -538,6 +538,68 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &275902922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 275902923}
+  - component: {fileID: 275902925}
+  - component: {fileID: 275902924}
+  m_Layer: 0
+  m_Name: Pentagon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &275902923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275902922}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 455980439}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &275902924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275902922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a26ea0dc6b1584a9b7eb07f43d3302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetInfo
+  Faction: 1
+  Shape: 5
+--- !u!114 &275902925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275902922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ddbd23d700a7d849b35b2941e631438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPooler
+  poolName: Red Pentagon Pool
+  objectToPool: {fileID: 3270266495791377626, guid: f021fd4b94dd71a40a700b4f70109aad, type: 3}
+  numberPerObject: 10
 --- !u!1 &360299142
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,6 +682,7 @@ Transform:
   - {fileID: 159075045}
   - {fileID: 1205290377}
   - {fileID: 1431407182}
+  - {fileID: 275902923}
   m_Father: {fileID: 1232143988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
@@ -1250,7 +1313,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnManager
   spawnArea: {fileID: 1462608226}
   enemyPools: {fileID: 1232143989}
-  spawnDelay: 1
+  minSpawnDelay: 0.5
+  maxSpawnDelay: 2
+  delayReduction: 0.1
+  reductionTime: 12
+  stageTime: 20
+  progression:
+  - weights:
+    - shape: 1
+      weight: 1
+  - weights:
+    - shape: 1
+      weight: 0.6
+    - shape: 3
+      weight: 0.4
+  - weights:
+    - shape: 1
+      weight: 0.5
+    - shape: 3
+      weight: 0.3
+    - shape: 4
+      weight: 0.2
+  - weights:
+    - shape: 1
+      weight: 0.4
+    - shape: 3
+      weight: 0.3
+    - shape: 4
+      weight: 0.2
+    - shape: 5
+      weight: 0.1
   splitConfigs:
   - parentShape: 3
     splitResults: 0100000001000000
@@ -1641,7 +1733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerLife: 5
-  ui: {fileID: 1131792060}
 --- !u!4 &1054680616
 Transform:
   m_ObjectHideFlags: 0
@@ -2252,6 +2343,7 @@ Transform:
   - {fileID: 1053187981}
   - {fileID: 18725319}
   - {fileID: 964151664}
+  - {fileID: 1642823466}
   m_Father: {fileID: 1232143988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1189872059
@@ -2448,6 +2540,8 @@ MonoBehaviour:
   - {fileID: 18725321}
   - {fileID: 1431407184}
   - {fileID: 964151666}
+  - {fileID: 275902925}
+  - {fileID: 1642823468}
 --- !u!1 &1316591720
 GameObject:
   m_ObjectHideFlags: 0
@@ -3196,6 +3290,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 132469731}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1642823465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1642823466}
+  - component: {fileID: 1642823468}
+  - component: {fileID: 1642823467}
+  m_Layer: 0
+  m_Name: Pentagon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1642823466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642823465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1169753975}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1642823467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642823465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a26ea0dc6b1584a9b7eb07f43d3302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetInfo
+  Faction: 2
+  Shape: 5
+--- !u!114 &1642823468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642823465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ddbd23d700a7d849b35b2941e631438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPooler
+  poolName: Blue Pentagon Pool
+  objectToPool: {fileID: 3270266495791377626, guid: 6ffb98a60577b874b870dc5d4b4e9dce, type: 3}
+  numberPerObject: 10
 --- !u!1 &1660527081
 GameObject:
   m_ObjectHideFlags: 0

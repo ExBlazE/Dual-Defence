@@ -72,4 +72,21 @@ public class Targets : MonoBehaviour
             blueTargets.Remove(enemy);
         }
     }
+
+    public void ClearTargets()
+    {
+        foreach(Enemy enemy in redTargets)
+        {
+            enemy.Kill();
+            RemoveTarget(enemy);
+        }
+        foreach(Enemy enemy in blueTargets)
+        {
+            enemy.Kill();
+            RemoveTarget(enemy);
+        }
+
+        redTargets.Clear();
+        blueTargets.Clear();
+    }
 }

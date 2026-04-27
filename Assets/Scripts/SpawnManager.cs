@@ -7,11 +7,21 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private SpawnArea spawnArea;
     [SerializeField] private Pools enemyPools;
 
-    [Space]
-    [SerializeField] private float spawnDelay = 0.5f;
+    [Header("Spawn Settings")]
+    [SerializeField] private float minSpawnDelay = 0.5f;
+    [SerializeField] private float maxSpawnDelay = 2f;
+    [SerializeField] private float delayReduction = 0.1f;
+    [SerializeField] private float reductionTime = 12f;
+    [SerializeField] private float stageTime = 20f;
+
+    [Header("Spawn Stage Settings")]
+    [SerializeField] private List<SpawnStage> progression;
 
     [Header("Split Management")]
     [SerializeField] private List<SplitData> splitConfigs;
+
+    private float currentSpawnDelay;
+    private int currentStageIndex;
 
     void OnEnable()
     {
@@ -25,7 +35,7 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(EnemySpawner());
+        ResetSpawn();
     }
 
     private IEnumerator EnemySpawner()
@@ -39,13 +49,49 @@ public class SpawnManager : MonoBehaviour
             while (spawnObj == null)
             {
                 Vector3 spawnPos = spawnArea.GetRandomPoint();
-                spawnObj = enemyPools.GetRandomPool().GetFromPool(spawnPos);
+
+                Faction randomFaction = Random.value < 0.5f ? Faction.Red : Faction.Blue;
+                Shape randomShape = GetRandomShape();
+                ObjectPooler pool = enemyPools.GetPool(randomFaction, randomShape);
+
+                spawnObj = pool.GetFromPool(spawnPos);
 
                 if (spawnObj == null)
                     yield return null; // If pool is empty, wait for next frame
             }
 
-            yield return new WaitForSeconds(spawnDelay);
+            yield return new WaitForSeconds(currentSpawnDelay);
+        }
+    }
+
+    private IEnumerator DifficultyManager()
+    {
+        while (GameManager.Instance.State != GameState.Playing)
+            yield return null;
+
+        float reductionTimer = 0f;
+        float stageTimer = 0f;
+
+        while (GameManager.Instance.State == GameState.Playing)
+        {
+            reductionTimer += Time.deltaTime;
+            stageTimer += Time.deltaTime;
+
+            if (reductionTimer >= reductionTime)
+            {
+                currentSpawnDelay = Mathf.Max(minSpawnDelay, currentSpawnDelay - delayReduction);
+                reductionTimer = 0f;
+            }
+            if (stageTimer >= stageTime)
+            {
+                AdvanceStage();
+                stageTimer = 0f;
+            }
+
+            if (CheckMaxDifficulty())
+                yield break;
+
+            yield return null;
         }
     }
 
@@ -75,6 +121,39 @@ public class SpawnManager : MonoBehaviour
             newObjRb.AddForce(forceDir.normalized * forcePower, ForceMode2D.Impulse);
         }
     }
+
+    private void AdvanceStage()
+    {
+        if (currentStageIndex < progression.Count - 1)
+            currentStageIndex++;
+    }
+
+    private Shape GetRandomShape()
+    {
+        float roll = Random.value;
+        float cumulativeWeight = 0f;
+
+        foreach (var entry in progression[currentStageIndex].weights)
+        {
+            cumulativeWeight += entry.weight;
+            if (roll <= cumulativeWeight) return entry.shape;
+        }
+
+        return Shape.Circle;
+    }
+
+    private bool CheckMaxDifficulty()
+    {
+        return (currentSpawnDelay == minSpawnDelay) && (currentStageIndex == progression.Count - 1);
+    }
+
+    private void ResetSpawn()
+    {
+        currentSpawnDelay = maxSpawnDelay;
+        currentStageIndex = 0;
+        StartCoroutine(EnemySpawner());
+        StartCoroutine(DifficultyManager());
+    }
 }
 
 [System.Serializable]
@@ -82,4 +161,17 @@ public class SplitData
 {
     public Shape parentShape;
     public List<Shape> splitResults;
+}
+
+[System.Serializable]
+public class SpawnWeight
+{
+    public Shape shape;
+    public float weight;
+}
+
+[System.Serializable]
+public class SpawnStage
+{
+    public List<SpawnWeight> weights;
 }

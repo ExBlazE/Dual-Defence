@@ -11,6 +11,8 @@ public class Pools : MonoBehaviour
     {
         foreach (ObjectPooler pool in allEnemyPools)
         {
+            if (!pool.gameObject.activeSelf) continue;
+
             TargetInfo info = pool.GetComponent<TargetInfo>();
             if (info != null)
             {

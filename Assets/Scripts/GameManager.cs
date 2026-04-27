@@ -3,7 +3,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int playerLife = 5;
-    [SerializeField] private UIManager ui;
 
     public GameState State { get; private set; }
 
@@ -29,6 +28,9 @@ public class GameManager : MonoBehaviour
         State = GameState.Playing;
     }
 
+    public float GetLifeFraction()
+    { return (float)_life / playerLife; }
+
     public void LoseLife()
     {
         _life--;
@@ -38,14 +40,30 @@ public class GameManager : MonoBehaviour
             State = GameState.Ended;
         }
 
-        if (ui != null)
-            ui.SetLifeBar((float)_life / playerLife);
+        GameEvents.RaiseLifeChange(GetLifeFraction());
     }
 
     public void AddScore(int score)
     {
         _score += score;
-        ui.SetScore(_score);
+        GameEvents.RaiseScoreChange(_score);
+    }
+
+    private void ResetLife()
+    {
+        _life = playerLife;
+    }
+
+    private void ResetScore()
+    {
+        _score = 0;
+    }
+
+    public void ResetGame()
+    {
+        ResetLife();
+        ResetScore();
+        State = GameState.Playing;
     }
 }
 
